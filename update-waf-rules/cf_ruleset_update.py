@@ -104,8 +104,8 @@ def run_sync(dry_run) -> None:
                 rule_id=CF_RULE_ID,
                 ruleset_id=CF_RULESET_ID,
                 zone_id=CF_ZONE_ID,
-                id=rule.id,
-                description=rule.description,
+                id=rule.id or "",
+                description=rule.description or "",
                 action=rule.action,
                 expression=new_expression,
             ) # type: ignore
