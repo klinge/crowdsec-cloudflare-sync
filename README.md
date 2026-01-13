@@ -16,24 +16,35 @@ a Cloudflare IP List
 2. **update-waf-rules** contains a script that lists locally banned IPs from the Crowdsec engine on your server 
 and updates a Cloudflare WAF ruleset 
 
+## Scripts
+
+Each script has its own README with detailed setup and usage instructions:
+
+- [update_blocklist/](update_blocklist/) - Sync CAPI community blocklist to Cloudflare IP List
+- [update-waf-rules/](update-waf-rules/) - Sync local CrowdSec decisions to Cloudflare WAF rule
+
 ## Requirements
 
-- CrowdSec installed with CAPI enabled
+- CrowdSec installed (with CAPI enabled for update_blocklist)
 - Cloudflare account with a valid API token
-- An existing Cloudflare IP List - the script doesn't create it
-- An existing Cloudflare Security rule - again the script doesn't create it
+- Existing Cloudflare IP List and/or WAF rule (scripts don't create them)
 - Python 3.7+
-- Root access on the machine where you execute the script (the Crowdsec cscli tool that is used
-  require that)
+- Root access (required for `cscli` command)
 
-## Fair warning
-The scripts: 
-- have been tested and developed on a linux server. They should work on other OSes but that's nothing
-that's been verified. 
-- especially the one that updates the ruleset can ruin your existing Cloudflare rules if something 
-goes wrong. Don't forget to make a backup of your ruleset. 
-- don't handle Cloudflare API rate limiting. The scripts are not designed to be run in realtime. It's 
-suggested not to run them more often than every 2nd hour. 
+## Quick Start
+
+1. Create a virtual environment and activate it
+2. Install dependencies: `pip install -r requirements.txt`
+3. Copy `.env-EDITME` to .env and configure with your values
+4. Test with `--dry-run` flag first
+5. Schedule with systemd or cron (recommended: every 2+ hours)
+
+## Warnings
+
+- Tested on Linux only - other OSes not verified
+- Will overwrite existing Cloudflare firewall rules - be safe and backup first
+- No API rate limiting - don't run too frequently (max every 2 hours)
+- Always test with `--dry-run` before production use 
 
 ## License
 
