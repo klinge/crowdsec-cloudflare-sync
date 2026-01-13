@@ -1,0 +1,1 @@
+Here goes script to update the WAF ruleset
