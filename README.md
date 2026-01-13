@@ -19,17 +19,21 @@ a Cloudflare WAF ruleset
 ## Requirements
 
 - CrowdSec installed with CAPI enabled
-- Cloudflare account with API access
+- Cloudflare account with a valid API token
 - An existing Cloudflare IP List - the script doesn't create it
 - An existing Cloudflare Security rule - again the script doesn't create it
 - Python 3.7+
+- Root access on the machine where you execute the script (the Crowdsec cscli tool that is used
+  require that)
 
 ## Fair warning
-The scripts has been tested and developed on a linux server. They should work on other OSes but that's nothing
+The scripts: 
+- have been tested and developed on a linux server. They should work on other OSes but that's nothing
 that's been verified. 
-
-The scripts (especially) the one that updates the ruleset can ruin your existing Cloudflare rules if something 
+- (especially) the one that updates the ruleset can ruin your existing Cloudflare rules if something 
 goes wrong, don't forget to make a backup of your ruleset. 
+- don't handle Cloudflare rate limiting. The scripts are not designed to be run in realtime. It's 
+suggested not to run them more often than every 2nd hour. 
 
 ## License
 
