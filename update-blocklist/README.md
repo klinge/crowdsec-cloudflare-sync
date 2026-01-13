@@ -96,7 +96,3 @@ systemctl list-timers cloudflare-list-sync.timer
 - **API errors**: Verify Cloudflare credentials and that API token has list edit permissions
 - **No IPs found**: Check CrowdSec CAPI enrollment status
 - **No traffic dropped**: For the list to be effective you need a Cloudflare WAF Rule that uses it to drop traffic
-
-## License
-
-MIT License
