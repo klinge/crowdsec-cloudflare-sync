@@ -1,4 +1,6 @@
 import os
+import sys
+import argparse
 import subprocess
 import json
 import logging
@@ -26,10 +28,11 @@ client = Cloudflare(
 )
 
 if not CF_ACCOUNT_ID or not CF_API_TOKEN or not CF_LIST_ID or not CF_LIST_NAME:
-    raise ValueError("Missing required environment variables for Cloudflare configuration.")
+    logger.error("Missing required environment variables for Cloudflare configuration.")
+    sys.exit(1)
 
 
-def prioritize_ips(ips, limit=9800):
+def prioritize_ips(ips, limit=9900):
     """Prioritize IPs by threat level for Cloudflare list limits.
 
     Sorts IPs by severity: exploits > bruteforce > scans, ensuring the most
@@ -110,7 +113,7 @@ def get_crowdsec_ips():
         return []
 
 
-def run_sync():
+def run_sync(dry_run) -> None:
     """Main synchronization function.
 
     Orchestrates the complete sync process:
@@ -122,10 +125,8 @@ def run_sync():
     Returns:
         None: Function exits early on errors or validation failures
 
-    Side Effects:
-        - Logs all operations and results
-        - Updates Cloudflare IP list via API
-        - May exit early if validation fails
+    Raises:
+        Logs errors and exits on failures to ensure safe operation.
     """
     logger.info("Starting Cloudflare sync")
 
@@ -136,13 +137,13 @@ def run_sync():
     )
     if list.name != CF_LIST_NAME:
         logger.warning("Listname not matching expected name, aborting sync")
-        return
+        sys.exit(1)
 
     # Fetch IPs from CrowdSec
     ips = get_crowdsec_ips()
     if not ips:
         logger.warning("No IPs found to sync")
-        return
+        sys.exit(1)
 
     # Prioritize IPs according to threat level
     prioritized_ips = prioritize_ips(ips)
@@ -159,7 +160,11 @@ def run_sync():
         )
     except Exception as e:
         logger.error(f"Cloudflare API Error: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    run_sync()
+    parser = argparse.ArgumentParser(description="Update Cloudflare list with Crowdsec community blocklist (CAPI).")
+    parser.add_argument('--dry-run', action='store_true', help='Write out what would be sent to Cloudflare, but make no changes.')
+    args = parser.parse_args()
+    run_sync(args.dry_run)
