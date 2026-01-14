@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Crowdsec to Cloudflare rule sync every 3rd hour
+
+[Timer]
+# Run at 01:00 then every 3rd hour
+OnCalendar=*-*-* 01/3:00:00
+# If the server was off, run immediately on boot
+Persistent=true
+# Spread the start time randomly over 15 mins to avoid spikes
+RandomizedDelaySec=15m
+
+[Install]
+WantedBy=timers.target

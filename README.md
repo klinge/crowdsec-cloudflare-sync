@@ -47,6 +47,10 @@ The Cloudflare API token you use need these permissions:
 4. Test with `--dry-run` flag first
 5. Schedule with systemd or cron (recommended: every 2+ hours)
 
+## Deployment
+In the "deploy" directory you find examples of systemd unit files and timers that you can use if 
+you are on linux. If you want to use cron or are on another OS you are on your own. 
+
 ## Warnings
 
 - Tested on Linux only - other OSes not verified

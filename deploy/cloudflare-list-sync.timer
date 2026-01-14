@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Crowdsec to Cloudflare IP banlist sync twice per day
+
+[Timer]
+# Run at 01:00 and 13:00 daily
+OnCalendar=*-*-* 01,13:00:00
+# If the server was off, run immediately on boot
+Persistent=true
+# Spread the start time randomly over 15 mins to avoid spikes
+RandomizedDelaySec=15m
+
+[Install]
+WantedBy=timers.target

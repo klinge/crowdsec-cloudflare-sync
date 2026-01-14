@@ -1,0 +1,16 @@
+[Unit]
+Description=CrowdSec to Cloudflare sync of local banned IPs
+After=network.target
+Wants=network-online.target
+
+[Service]
+SyslogIdentifier=cf-rule-sync
+Type=oneshot
+WorkingDirectory=/opt/cloudflare-sync
+ExecStart=/opt/cloudflare-sync/venv/bin/python /opt/cloudflare-sync/cf_ruleset_update.py
+# Ensure the script runs as root for cscli access
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
