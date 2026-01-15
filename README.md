@@ -46,16 +46,15 @@ The Cloudflare API token you use need these permissions:
 
 ## Quick Start
 
-Clone the repo into an empty folder: 
+1. Clone the repo into an empty folder: 
 ```bash
 git clone https://github.com/yourusername/crowdsec-cloudflare-sync.git
 ```
-
-1. Create a virtual environment and activate it
-2. Install dependencies: `pip install -r requirements.txt`
-3. Copy `.env-EDITME` to .env and configure with your values (see [SETUP.md](SETUP.md) for help finding Cloudflare IDs)
-4. Test with `--dry-run` flag first
-5. Schedule with systemd or cron (recommended: every 2+ hours) or another scheduling tool your OS supports
+2. Create a virtual environment and activate it
+3. Install dependencies: `pip install -r requirements.txt`
+4. Copy `.env-EDITME` to .env and configure with your values (see [SETUP.md](SETUP.md) for help finding Cloudflare IDs)
+5. Test with `--dry-run` flag first
+6. Schedule with systemd or cron (recommended: every 2+ hours) or another scheduling tool your OS supports
 
 ## Deployment
 

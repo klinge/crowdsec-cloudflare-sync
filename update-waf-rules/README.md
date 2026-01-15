@@ -8,6 +8,7 @@ This script fetches banned IP addresses from your local CrowdSec instance and up
 
 ## Usage
 
+### Manual execution:
 ```bash
 # Dry run (recommended first)
 python cf_ruleset_update.py --dry-run
@@ -15,6 +16,12 @@ python cf_ruleset_update.py --dry-run
 # Update Cloudflare rule
 python cf_ruleset_update.py
 ```
+
+## Configuration
+
+### Environment Variables (.env)
+Don't forget to change the name of .env-EDITME to .env and
+update all the settings in the file with your information.
 
 ## How it works
 
@@ -30,6 +37,10 @@ python cf_ruleset_update.py
 - No API rate limiting - don't run too frequently
 - Requires root access for CrowdSec integration
 
-## License
+## Troubleshooting
 
-MIT License
+- **Permission errors**: Ensure script runs as root for cscli access
+- **API errors**: Verify Cloudflare credentials and that API token has list edit permissions
+- **No IPs found**: Verify local crowdsec operation. Test that you have locally banned IPs 
+with: "sudo cscli decisions list"
+

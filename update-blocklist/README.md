@@ -1,6 +1,6 @@
-# CrowdSec to Cloudflare IP Sync
+# Sync Crowdsec CAPI blocklist to Cloudflare list
 
-Automatically sync CrowdSec Community API (CAPI) blocked IPs to Cloudflare IP lists for edge-level protection.
+Automatically sync CrowdSec Community API (CAPI) IP blocklist to a Cloudflare IP list for edge-level protection.
 
 ## Overview
 
@@ -17,34 +17,6 @@ get the full protection that the list offers.
 - Python 3.7+
 - Root access (for cscli command)
 
-## Installation
-
-1. **Clone and setup:**
-Suggested location for a unix server setup: 
-
-   ```bash
-   sudo mkdir -p /opt/cloudflare-sync
-   sudo cp -r * /opt/cloudflare-sync/
-   cd /opt/cloudflare-sync
-   ```
-
-2. **Create virtual environment:**
-   ```bash
-   sudo python3 -m venv venv
-   sudo venv/bin/pip install -r requirements.txt
-   ```
-
-3. **Configure environment:**
-   ```bash
-   sudo cp .env-EDITME .env
-   sudo nano .env  # Add your Cloudflare credentials
-   sudo chmod 600 .env
-   ```
-
-4. **Create systemd service:**
-Run with a systemd service + timer. Or use cron if you want. 
-Remember cscli, which is used by the script, needs to be run as root. 
-
 ## Configuration
 
 ### Environment Variables (.env)
@@ -56,34 +28,16 @@ update all the settings in the file with your information.
 ### Manual execution:
 ```bash
 cd /opt/cloudflare-sync
-sudo venv/bin/python cloudflare_update.py
-```
-
-### Service management:
-```bash
-sudo systemctl status cloudflare-list-sync.timer
-sudo systemctl start cloudflare-list-sync.service
+sudo venv/bin/python cf_blocklist_update.py
 ```
 
 ## How it works
 
 1. **Fetch** - Retrieves CAPI decisions from CrowdSec
 2. **Prioritize** - Sorts by threat level (exploit > bruteforce > scan)
-3. **Limit** - Truncates to 9,800 IPs for Cloudflare limits
+3. **Limit** - Truncates to 9 900 IPs for Cloudflare limits
 4. **Verify** - Checks list name matches configuration
 5. **Update** - Replaces entire Cloudflare IP list
-
-## Monitoring
-
-View logs:
-```bash
-journalctl -u cloudflare-list-sync.service --since today
-```
-
-Check timer status:
-```bash
-systemctl list-timers cloudflare-list-sync.timer
-```
 
 ## Troubleshooting
 
