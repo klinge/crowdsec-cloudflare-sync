@@ -1,6 +1,6 @@
-# CrowdSec to Cloudflare Sync
+# Crowdsec to Cloudflare Sync
 
-Automatically sync CrowdSec threat intelligence to Cloudflare. 
+Automatically sync Crowdsec threat intelligence to Cloudflare. 
 
 ## Overview
 
@@ -10,6 +10,9 @@ limits. The Worker based bouncer is complex and not very suitable for a free Clo
 Using both Crowdsec and Cloudflare I still wanted the advantage of being able to off-load some of the blocking from 
 my local server to the edge servers on Cloudflare. So this project contains two small python scripts 
 that cover my main needs. 
+
+To respect Cloudflare API rate limits they're made to be scheduled at fixed intervals - not 
+run in real-time. 
 
 1. **update_blocklist**: contains a script that pulls data from the Crowdsec community blocklist (CAPI) and updates
 a Cloudflare IP filter list
@@ -66,7 +69,7 @@ you are on linux. If you want to use cron or are on another OS you are on your o
 
 ## Warnings
 
-- Tested on Linux only - other OSes not verified
+- Tested on Linux only - other OSes should work but are not verified
 - Will overwrite existing Cloudflare firewall rules - be safe and backup first
 - Doesn't handle Cloudflare API rate limiting - don't run too frequently (max every 2 hours)
 - Always test with `--dry-run` before production use 
