@@ -51,6 +51,8 @@ def get_crowdsec_banned_ips() -> list:
 def format_ip_for_cloudflare(ips) -> str:
     """Format IP address for Cloudflare WAF expression"""
     # Expected format: (ip.src in {91.92.243.241 195.178.110.68})
+    if not ips:
+        return "(ip.src in {})"
     ip_string = " ".join(ips)
 
     return f"(ip.src in {{{ip_string}}})"

@@ -31,6 +31,9 @@ Systemd service and timer files for automated CrowdSec to Cloudflare synchroniza
    sudo systemctl enable --now cloudflare-list-sync.timer
    sudo systemctl enable --now cloudflare-rule-sync.timer
    ```
+Don't enable the services. It's not needed when they are activated by timers and will likely
+result in them being run at system startup. 
+
 
 ## Management
 

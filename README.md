@@ -16,6 +16,13 @@ a Cloudflare IP filter list
 2. **update-waf-rules** contains a script that lists locally banned IPs from the Crowdsec engine on your server 
 and updates a Cloudflare WAF ruleset 
 
+## Features
+
+- **Cloudflare integration** - Updates IP lists/rules via API
+- **Systemd service** - Prepared to run as automated system service
+- **Comprehensive logging** - Full audit trail for operations, logs to system log when scheduled
+- **Low complexity** - The scripts are kept simple to make them easy to follow and adjust
+
 ## Scripts
 
 Each script has its own README with detailed setup and usage instructions:
@@ -41,11 +48,16 @@ The Cloudflare API token you use need these permissions:
 
 ## Quick Start
 
+Clone the repo into an empty folder: 
+```bash
+git clone https://github.com/yourusername/crowdsec-cloudflare-sync.git
+```
+
 1. Create a virtual environment and activate it
 2. Install dependencies: `pip install -r requirements.txt`
-3. Copy `.env-EDITME` to .env and configure with your values
+3. Copy `.env-EDITME` to .env and configure with your values (see [SETUP.md](SETUP.md) for help finding Cloudflare IDs)
 4. Test with `--dry-run` flag first
-5. Schedule with systemd or cron (recommended: every 2+ hours)
+5. Schedule with systemd or cron (recommended: every 2+ hours) or another scheduling tool your OS supports
 
 ## Deployment
 
@@ -56,8 +68,11 @@ you are on linux. If you want to use cron or are on another OS you are on your o
 
 - Tested on Linux only - other OSes not verified
 - Will overwrite existing Cloudflare firewall rules - be safe and backup first
-- No API rate limiting - don't run too frequently (max every 2 hours)
+- Doesn't handle Cloudflare API rate limiting - don't run too frequently (max every 2 hours)
 - Always test with `--dry-run` before production use 
+
+## Contributing
+Feel free to fork the repository and make a pull request. Test with --dry-run before submitting. 
 
 ## License
 

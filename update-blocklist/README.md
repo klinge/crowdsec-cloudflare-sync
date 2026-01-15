@@ -9,14 +9,6 @@ This service fetches threat intelligence from CrowdSec's Community API and updat
 **NOTE**: due to the Cloudflares limit on list length the script does not send the entire CAPI list to Cloudflare. You will not
 get the full protection that the list offers. 
 
-## Features
-
-- **Intelligent prioritization** - Exploits get priority over scans
-- **Cloudflare integration** - Updates IP lists via API
-- **Systemd service** - Runs as automated system service
-- **Comprehensive logging** - Full audit trail for operations
-- **Safety checks** - Verifies list names before updates
-
 ## Requirements
 
 - CrowdSec installed with CAPI enabled

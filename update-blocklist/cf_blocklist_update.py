@@ -12,7 +12,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger('cloudflare-list-sync')
+logger = logging.getLogger('cf-list-update')
 
 
 # Load the .env file
