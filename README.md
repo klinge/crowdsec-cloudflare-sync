@@ -22,8 +22,8 @@ that cover my main needs.
 
 Each script has its own README with detailed setup and usage instructions:
 
-- [update_blocklist](https://github.com/klinge/crowdsec-crowdflare-sync/tree/main/update-blocklist) - Sync CAPI community blocklist to Cloudflare IP List
-- [update-waf-rules](https://github.com/klinge/crowdsec-crowdflare-sync/tree/main/update-waf-rules) - Sync local CrowdSec decisions to Cloudflare WAF rule
+- [update_blocklist](/update-blocklist) - Sync CAPI community blocklist to Cloudflare IP List
+- [update-waf-rules](/update-waf-rules) - Sync local CrowdSec decisions to Cloudflare WAF rule
 
 To respect Cloudflare API rate limits they're made to be scheduled at fixed intervals - not 
 run in real-time. 
