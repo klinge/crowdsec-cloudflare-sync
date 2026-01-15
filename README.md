@@ -11,14 +11,6 @@ Using both Crowdsec and Cloudflare I still wanted the advantage of being able to
 my local server to the edge servers on Cloudflare. So this project contains two small python scripts 
 that cover my main needs. 
 
-1. **update_blocklist**: contains a script that pulls data from the Crowdsec community blocklist (CAPI) and updates
-a Cloudflare IP filter list
-2. **update-waf-rules** contains a script that lists locally banned IPs from the Crowdsec engine on your server 
-and updates a Cloudflare WAF ruleset 
-
-To respect Cloudflare API rate limits they're made to be scheduled at fixed intervals - not 
-run in real-time. 
-
 ## Features
 
 - **Cloudflare integration** - Updates IP lists/rules via API
@@ -32,6 +24,9 @@ Each script has its own README with detailed setup and usage instructions:
 
 - [update_blocklist](https://github.com/klinge/crowdsec-crowdflare-sync/tree/main/update-blocklist) - Sync CAPI community blocklist to Cloudflare IP List
 - [update-waf-rules](https://github.com/klinge/crowdsec-crowdflare-sync/tree/main/update-waf-rules) - Sync local CrowdSec decisions to Cloudflare WAF rule
+
+To respect Cloudflare API rate limits they're made to be scheduled at fixed intervals - not 
+run in real-time. 
 
 ## Requirements
 
