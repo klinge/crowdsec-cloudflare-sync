@@ -48,7 +48,7 @@ The Cloudflare API token you use need these permissions:
 
 1. Clone the repo into an empty folder: 
 ```bash
-git clone https://github.com/yourusername/crowdsec-cloudflare-sync.git
+git clone https://github.com/klinge/crowdsec-cloudflare-sync.git
 ```
 2. Create a virtual environment and activate it
 3. Install dependencies: `pip install -r requirements.txt`
