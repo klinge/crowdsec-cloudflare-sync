@@ -59,7 +59,8 @@ git clone https://github.com/klinge/crowdsec-cloudflare-sync.git
 ## Deployment
 
 In the "deploy" directory you find examples of systemd unit files and timers that you can use if 
-you are on linux. If you want to use cron or are on another OS you are on your own. 
+you are on linux. There's also suggestions on how to deploy them. If you want to use cron or are on another OS 
+you'll have to find your own way of doing it. 
 
 ## Warnings
 
