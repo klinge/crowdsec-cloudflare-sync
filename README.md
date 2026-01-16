@@ -16,7 +16,7 @@ that cover my main needs.
 - **Cloudflare integration** - Updates IP lists/rules via API
 - **Systemd service** - Prepared to run as automated system service
 - **Comprehensive logging** - Full audit trail for operations, logs to system log when scheduled
-- **Low complexity** - The scripts are kept simple to make them easy to follow and adjust
+- **Low complexity** - The scripts are kept standalone and simple to make them easy to follow and adjust
 
 ## Scripts
 
@@ -64,9 +64,12 @@ you'll have to find your own way of doing it.
 
 ## Warnings
 
-- Tested on Linux only - other OSes should work but are not verified
+- Cloudflare list limit is 10 000 rows. And you only get one list on a free plan. The Crowdsec CAPI blocklist is 
+usually >15 000 rows. So the blocklist will be truncated. You won't get all the IPs in the CAPI list banned at Cloudflare. 
+You'll still need a crowsdec bouncer on your local server to handle bans there! 
 - Will overwrite existing Cloudflare firewall rules - be safe and backup first
-- Doesn't handle Cloudflare API rate limiting - don't run too frequently (max every 2 hours)
+- Scripts doesn't handle Cloudflare API rate limiting - don't run too frequently (max every 2 hours)
+- Tested on Linux only - other OSes should work but are not verified
 - Always test with `--dry-run` before production use 
 
 ## Contributing
