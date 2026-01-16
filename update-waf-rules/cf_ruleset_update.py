@@ -8,13 +8,6 @@ from dotenv import load_dotenv
 from cloudflare import Cloudflare
 
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger('cf-ruleset-update')
-
 # Load the .env file
 load_dotenv()
 CF_ACCOUNT_ID = os.getenv("CLOUDFLARE_ACCOUNT_ID", "")
@@ -22,6 +15,19 @@ CF_API_TOKEN = os.getenv("CLOUDFLARE_API_TOKEN", "")
 CF_ZONE_ID = os.getenv("CLOUDFLARE_ZONE_ID", "")
 CF_RULESET_ID = os.getenv("CLOUDFLARE_RULESET_ID", "")
 CF_RULE_ID = os.getenv("CLOUDFLARE_RULE_ID", "")
+
+# Configure logging
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+logging.basicConfig(
+    level=getattr(logging, LOG_LEVEL, logging.INFO),
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger('cf-ruleset-update')
+
+# Suppress verbose logging from dependencies
+logging.getLogger('cloudflare').setLevel(logging.INFO)
+logging.getLogger('httpx').setLevel(logging.INFO)
+logging.getLogger('httpcore').setLevel(logging.INFO)
 
 # Exit if necessary env vars are missing
 if not CF_ACCOUNT_ID or not CF_API_TOKEN or not CF_RULESET_ID or not CF_RULE_ID or not CF_ZONE_ID:
@@ -42,6 +48,7 @@ def get_crowdsec_banned_ips() -> list:
         # Get all IPs from decisions filter on type=ban
         # The ip is in the "value" field of the decision dict
         ips = [d["value"] for item in result for d in item.get("decisions", []) if d.get("type") == "ban"]
+        logger.info(f"Fetched {len(ips)} banned IPs from CrowdSec")
         return sorted(set(ips))
     except Exception as e:
         logger.error(f"Error fetching IPs from CrowdSec: {e}")
@@ -55,6 +62,7 @@ def format_ip_for_cloudflare(ips) -> str:
         return "(ip.src in {})"
     ip_string = " ".join(ips)
 
+    logger.debug(f"Formatted IP string for Cloudflare: {ip_string}")
     return f"(ip.src in {{{ip_string}}})"
 
 
@@ -75,6 +83,7 @@ def fetch_current_rule():
         logger.error(f"Rule with ID {CF_RULE_ID} not found in ruleset")
         sys.exit(1)
 
+    logger.debug(f"Fetched current rule: {rule}")
     return rule
 
 
@@ -83,7 +92,6 @@ def run_sync(dry_run) -> None:
 
     # 1. Fetch IP list from CrowdSec
     ip_list = get_crowdsec_banned_ips()
-    logger.info(f"Fetched {len(ip_list)} IP-adresses from CrowdSec.")
 
     # 2. Format ips to correct expression format for cloudflare
     new_expression = format_ip_for_cloudflare(ip_list)
@@ -112,8 +120,10 @@ def run_sync(dry_run) -> None:
                 action=rule.action,  # pyright: ignore[reportArgumentType]
                 expression=new_expression,
             )  # type: ignore
-            logger.info(f"Cloudflare response: {response}")
-            logger.info(f"Successfully updated Cloudflare ruleset with {len(ip_list)} IP-adresses.")
+            logger.debug(f"Cloudflare response: {response}")
+            logger.info(
+                f"Successfully updated Cloudflare ruleset with {len(ip_list)} IP-adresses (rule version: {response.rules[2].version})."
+            )
         except Exception as e:
             logger.error(f"Error updating Cloudflare ruleset: {e}")
             sys.exit(1)

@@ -7,20 +7,25 @@ import logging
 from dotenv import load_dotenv
 from cloudflare import Cloudflare
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger('cf-list-update')
-
-
 # Load the .env file
 load_dotenv()
 CF_ACCOUNT_ID = os.getenv("CLOUDFLARE_ACCOUNT_ID", "")
 CF_API_TOKEN = os.getenv("CLOUDFLARE_API_TOKEN", "")
 CF_LIST_ID = os.getenv("CLOUDFLARE_LIST_ID", "")
 CF_LIST_NAME = os.getenv("CLOUDFLARE_LIST_NAME", "")
+
+# Configure logging
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+logging.basicConfig(
+    level=getattr(logging, LOG_LEVEL, logging.INFO),
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger('cf-list-update')
+
+# Suppress verbose logging from dependencies
+logging.getLogger('cloudflare').setLevel(logging.INFO)
+logging.getLogger('httpx').setLevel(logging.INFO)
+logging.getLogger('httpcore').setLevel(logging.INFO)
 
 # Exit if required env vars are missing
 if not CF_ACCOUNT_ID or not CF_API_TOKEN or not CF_LIST_ID or not CF_LIST_NAME:
