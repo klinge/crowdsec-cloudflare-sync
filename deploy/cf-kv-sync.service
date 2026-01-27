@@ -1,0 +1,16 @@
+[Unit]
+Description=Syncs Crowdsecs community blocklist to Cloudflare KV store
+After=network.target
+Wants=network-online.target
+
+[Service]
+SyslogIdentifier=cf-kv-sync
+Type=oneshot
+WorkingDirectory=/opt/cloudflare-sync
+ExecStart=/opt/cloudflare-sync/venv/bin/python /opt/cloudflare-sync/cf_blocklist_kv_update.py
+# Ensure the script runs as root for cscli access
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
