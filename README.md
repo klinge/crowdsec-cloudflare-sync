@@ -74,6 +74,10 @@ You'll still need a crowsdec bouncer on your local server to handle bans there!
 - Tested on Linux only - other OSes should work but are not verified
 - Always test with `--dry-run` before production use 
 
+## Troubleshooting
+
+- If you get '403' errors from Cloudflare your API token probably don't have the correct permissions 
+
 ## Contributing
 Feel free to fork the repository and make a pull request. Test with --dry-run before submitting. 
 
