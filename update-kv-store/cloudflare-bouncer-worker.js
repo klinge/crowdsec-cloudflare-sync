@@ -1,7 +1,6 @@
 /**
  * This worker reads from a KV key that contains the Crowdstrike CAPI
- * blocklist. This must have values in order for the worker do
- * actually do anything. 
+ * blocklist. This must be added as a bindning to the worker. 
  */
 
 let cachedSet = null;
