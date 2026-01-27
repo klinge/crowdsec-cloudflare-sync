@@ -22,7 +22,7 @@ logging.basicConfig(
     level=getattr(logging, LOG_LEVEL, logging.INFO),
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger('cf-list-update')
+logger = logging.getLogger('cf-kv-update')
 
 # Suppress verbose logging from dependencies
 logging.getLogger('cloudflare').setLevel(logging.INFO)
