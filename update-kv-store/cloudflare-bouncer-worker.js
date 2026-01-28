@@ -16,12 +16,16 @@ export default {
 
     try {
       const now = Date.now();
-      // Re-sync from KV every 5 minutes (300,000 ms)
+      // Re-sync from KV every 5 minutes (300 000 ms)
       if (!cachedSet || (now - lastUpdate > 300000)) {
         
         // This gets the string: {"metadata":{}, "value":"[...]"}
         // You need to use the bindning name you setup in Cloudflare
-        const rawEnvelope = await env.CS_BLOCKLIST_BINDING.get("CS_CAPI_LIST");
+        const rawEnvelope = await env.CS_BLOCKLIST_BINDING.get("CS_CAPI_LIST", 
+        {
+          type: "text",           // avoid unnecessary JSON parse here
+          cacheTtl: 600           // seconds — let edge cache the raw KV value longer
+        });
         
         if (rawEnvelope) {
           const envelope = JSON.parse(rawEnvelope);
@@ -32,7 +36,7 @@ export default {
           
           cachedSet = new Set(ipArray);
           lastUpdate = now;
-          console.log(`Bouncer active: ${cachedSet.size} IPs loaded.`);
+          console.log(`Blocklist refreshed: ${cachedSet.size} IPs loaded.`);
         }
       }
 
