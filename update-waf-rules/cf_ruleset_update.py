@@ -3,6 +3,7 @@ import argparse
 import subprocess
 import json
 import sys
+import ipaddress
 import logging
 from dotenv import load_dotenv
 from cloudflare import Cloudflare
@@ -56,14 +57,35 @@ def get_crowdsec_banned_ips() -> list:
 
 
 def format_ip_for_cloudflare(ips) -> str:
-    """Format IP address for Cloudflare WAF expression"""
-    # Expected format: (ip.src in {91.92.243.241 195.178.110.68})
-    if not ips:
-        return "(ip.src in {})"
-    ip_string = " ".join(ips)
+    """Format IP addresses cleanly, filtering out non-IP data"""
+    # Expected output format: (ip.src in {91.92.243.241 195.178.110.68})
+    ipv4_list = []
+    ipv6_list = []
 
-    logger.debug(f"Formatted IP string for Cloudflare: {ip_string}")
-    return f"(ip.src in {{{ip_string}}})"
+    for ip in ips:
+        try:
+            addr = ipaddress.ip_address(ip)
+            if addr.version == 4:
+                ipv4_list.append(str(addr))
+            else:
+                # Use quotes for IPv6 inside the set
+                ipv6_list.append(f'{addr}')
+        except ValueError:
+            logger.warning(f"Dropping invalid data: {ip}")
+
+    # Build individual expression components
+    parts = []
+    if ipv4_list:
+        parts.append(f"(ip.src in {{{' '.join(ipv4_list)}}})")
+    if ipv6_list:
+        parts.append(f"(ip.src in {{{' '.join(ipv6_list)}}})")
+
+    if not parts:
+        return "(ip.src in {})"  # No valid IPs, return empty set expression
+
+    # Join them with 'or' if both IPv4 and IPv6 are present
+    # Result: (ip.src in {1.1.1.1}) or (ip.src in {"2a01::1"})
+    return " or ".join(parts)
 
 
 def fetch_current_rule():
